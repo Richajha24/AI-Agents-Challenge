@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Premium color palette */
+  --forest-green: #1a3a3a;
+  --warm-ivory: #f5f1ed;
+  --dark-graphite: #2a2a2a;
+  --muted-gold: #c9b89b;
+  --soft-beige: #ede8e3;
+  
+  /* Semantic colors */
+  --success: #2ecc71;
+  --warning: #f39c12;
+  --error: #e74c3c;
+  --info: #3498db;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Manrope', sans-serif;
+  background-color: var(--warm-ivory);
+  color: var(--dark-graphite);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--forest-green) 0%, var(--muted-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.card {
+  background: white;
+  border: 1px solid #e0dcd8;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.btn-primary {
+  background-color: var(--forest-green);
+  color: var(--warm-ivory);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0f2828;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(26, 58, 58, 0.3);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--forest-green);
+  border: 2px solid var(--forest-green);
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: var(--forest-green);
+  color: var(--warm-ivory);
+}
