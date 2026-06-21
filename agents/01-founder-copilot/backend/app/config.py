@@ -3,7 +3,7 @@ from typing import Optional
 
 class Settings(BaseSettings):
     # Database
-    DATABASE_URL: str = "postgresql://user:password@localhost/founder_copilot"
+    DATABASE_URL: str ="sqlite+aiosqlite:///./founder_copilot.db"
     
     # API Keys
     OPENAI_API_KEY: Optional[str] = None

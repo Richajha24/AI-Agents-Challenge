@@ -21,7 +21,12 @@ class AnalysisOrchestrator:
     """Orchestrates all analysis agents"""
     
     def __init__(self):
-        self.api_key = getattr(settings, f"{settings.DEFAULT_PROVIDER.upper()}_API_KEY", None)
+        provider_key_map = {
+    "gemini": "GOOGLE_API_KEY",
+    "openai": "OPENAI_API_KEY",
+    "claude": "ANTHROPIC_API_KEY",
+}
+        self.api_key = getattr(settings, provider_key_map.get(settings.DEFAULT_PROVIDER.lower(), ""), None)
         if not self.api_key:
             raise ValueError(f"API key not configured for provider: {settings.DEFAULT_PROVIDER}")
         self.provider = get_provider(settings.DEFAULT_PROVIDER, self.api_key)

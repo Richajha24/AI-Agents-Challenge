@@ -1,0 +1,1 @@
+"""Startup Intelligence backend application."""

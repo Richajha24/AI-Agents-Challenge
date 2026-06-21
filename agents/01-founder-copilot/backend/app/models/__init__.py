@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, DateTime, Text, JSON, Integer, Boolean
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import String
 from datetime import datetime
 import uuid
 from app.database import Base
@@ -7,7 +7,7 @@ from app.database import Base
 class Analysis(Base):
     __tablename__ = "analyses"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     user_id = Column(String, nullable=True)
     startup_idea = Column(String, nullable=False)
     industry = Column(String, nullable=False)
@@ -37,8 +37,8 @@ class Analysis(Base):
 class Report(Base):
     __tablename__ = "reports"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    analysis_id = Column(UUID(as_uuid=True), nullable=False)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    analysis_id = Column(String(36), nullable=False)
     title = Column(String, nullable=False)
     content = Column(Text, nullable=False)  # Markdown content
     pdf_path = Column(String, nullable=True)

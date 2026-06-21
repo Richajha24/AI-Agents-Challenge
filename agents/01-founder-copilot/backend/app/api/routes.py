@@ -1,7 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from uuid import uuid4
 from app.database import get_db
 from app.models import Analysis
 from app.schemas import StartupIdeaInput, AnalysisResult, AnalysisStatusResponse
@@ -11,16 +10,35 @@ import asyncio
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
-
+def run_analysis(orchestrator, analysis_id, startup_idea, industry, problem_statement, website_url):
+    """Run analysis in a new event loop (for background thread)"""
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    from app.database import AsyncSessionLocal
+    async def _run():
+        async with AsyncSessionLocal() as db:
+            await orchestrator.execute_analysis(
+                db=db,
+                analysis_id=analysis_id,
+                startup_idea=startup_idea,
+                industry=industry,
+                problem_statement=problem_statement,
+                website_url=website_url
+            )
+    try:
+        loop.run_until_complete(_run())
+    except Exception as e:
+        logger.error(f"Background task failed: {str(e)}", exc_info=True)
+    finally:
+        loop.close()
 @router.post("/api/v1/analyze", response_model=dict)
 async def create_analysis(
     request: StartupIdeaInput,
+    background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db)
 ):
     """Create a new startup analysis"""
-    
     try:
-        # Create analysis record
         analysis = Analysis(
             startup_idea=request.startup_idea,
             industry=request.industry,
@@ -31,20 +49,18 @@ async def create_analysis(
         db.add(analysis)
         await db.commit()
         await db.refresh(analysis)
-        
-        # Start analysis in background
+
         orchestrator = AnalysisOrchestrator()
-        asyncio.create_task(
-            orchestrator.execute_analysis(
-                db=db,
-                analysis_id=analysis.id,
-                startup_idea=request.startup_idea,
-                industry=request.industry,
-                problem_statement=request.problem_statement,
-                website_url=request.website_url
-            )
+        background_tasks.add_task(
+            run_analysis,
+            orchestrator,
+            analysis.id,
+            request.startup_idea,
+            request.industry,
+            request.problem_statement,
+            request.website_url
         )
-        
+
         return {
             "analysis_id": str(analysis.id),
             "status": "pending",
@@ -60,15 +76,14 @@ async def get_analysis_status(
     db: AsyncSession = Depends(get_db)
 ):
     """Get analysis status and progress"""
-    
     try:
         stmt = select(Analysis).where(Analysis.id == analysis_id)
         result = await db.execute(stmt)
         analysis = result.scalar_one_or_none()
-        
+
         if not analysis:
             raise HTTPException(status_code=404, detail="Analysis not found")
-        
+
         return AnalysisStatusResponse(
             analysis_id=analysis.id,
             status=analysis.status,
@@ -88,21 +103,20 @@ async def get_report(
     db: AsyncSession = Depends(get_db)
 ):
     """Get complete analysis report"""
-    
     try:
         stmt = select(Analysis).where(Analysis.id == analysis_id)
         result = await db.execute(stmt)
         analysis = result.scalar_one_or_none()
-        
+
         if not analysis:
             raise HTTPException(status_code=404, detail="Analysis not found")
-        
+
         if analysis.status != "completed":
             raise HTTPException(
-                status_code=400, 
+                status_code=400,
                 detail=f"Analysis not completed. Current status: {analysis.status}"
             )
-        
+
         return AnalysisResult(
             analysis_id=analysis.id,
             status=analysis.status,
@@ -132,12 +146,11 @@ async def get_analysis_history(
     limit: int = 20
 ):
     """Get user's analysis history"""
-    
     try:
         stmt = select(Analysis).order_by(Analysis.created_at.desc()).limit(limit)
         result = await db.execute(stmt)
         analyses = result.scalars().all()
-        
+
         return [
             {
                 "analysis_id": str(a.id),

@@ -77,16 +77,22 @@ class GeminiProvider(AIProvider):
     """Google Gemini API provider"""
     
     def __init__(self, api_key: str):
-        import google.generativeai as genai
-        genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel("gemini-pro")
+        from google import genai
+        self.client = genai.Client(api_key=api_key)
+        self.model = "gemini-2.0-flash"
     
     async def generate(self, prompt: str, **kwargs) -> str:
-        response = self.model.generate_content(prompt)
+        response = self.client.models.generate_content(
+            model=self.model,
+            contents=prompt
+        )
         return response.text
     
     async def generate_json(self, prompt: str, schema: Dict[str, Any], **kwargs) -> Dict[str, Any]:
-        response = self.model.generate_content(prompt)
+        response = self.client.models.generate_content(
+            model=self.model,
+            contents=prompt + "\n\nRespond with valid JSON only, no markdown, no backticks."
+        )
         content = response.text
         try:
             return json.loads(content)
