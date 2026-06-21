@@ -1,15 +1,26 @@
-node_modules/
-.next/
-out/
-
-venv/
+# Python
 __pycache__/
 *.pyc
-
+venv/
 .env
-.env.local
 
+# Node
+node_modules/
+.next/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database
 *.db
 *.sqlite3
 
+# Logs
 *.log
