@@ -1,0 +1,16 @@
+.env
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+consulting_analysis.md
+*.md
+!README.md
+!COMPLETION_REPORT.md
+!prompts/system_prompt.md

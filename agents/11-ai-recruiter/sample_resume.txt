@@ -1,0 +1,38 @@
+Jane Doe
+Software Engineer
+Email: jane.doe@email.com | Phone: (555) 123-4567 | LinkedIn: linkedin.com/in/janedoe
+
+SUMMARY
+Results-driven software engineer with 4 years of experience building Python backend services,
+REST APIs, and CLI tools. Strong focus on clean code, testing, and developer experience.
+
+SKILLS
+- Languages: Python, JavaScript, SQL
+- Frameworks: FastAPI, Flask, React
+- Tools: Git, Docker, pytest, Rich, PostgreSQL
+- Cloud: AWS (EC2, S3, Lambda basics)
+
+EXPERIENCE
+
+Software Engineer | Tech Solutions Inc. | Jan 2022 – Present
+- Built and maintained REST APIs using Python and FastAPI serving 50K daily requests
+- Designed CLI tools for internal automation using argparse and Rich
+- Wrote unit and integration tests with pytest, achieving 85% code coverage
+- Collaborated with cross-functional teams in Agile sprints
+
+Junior Developer | Startup Labs | Jun 2020 – Dec 2021
+- Developed Flask microservices for data processing pipelines
+- Created Docker containers for consistent development and deployment
+- Participated in code reviews and documentation improvements
+
+EDUCATION
+Bachelor of Science in Computer Science
+State University | Graduated May 2020 | GPA: 3.7/4.0
+
+CERTIFICATIONS
+- AWS Certified Cloud Practitioner (2023)
+- Python Institute PCAP – Certified Associate in Python Programming (2021)
+
+PROJECTS
+Task Manager CLI — Python CLI app with JSON storage and Rich terminal UI
+API Monitor — FastAPI service with health checks and structured logging

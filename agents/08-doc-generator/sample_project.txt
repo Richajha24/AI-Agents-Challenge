@@ -1,0 +1,1 @@
+Build a CLI task manager in Python that stores tasks in JSON files, supports add/list/complete commands, and uses Rich for terminal output.

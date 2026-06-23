@@ -1,0 +1,10 @@
+.env
+.venv
+venv
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+feedback_analysis_report.md
+

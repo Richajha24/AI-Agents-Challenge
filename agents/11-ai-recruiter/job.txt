@@ -1,0 +1,8 @@
+AI & Data Science Intern
+
+Requirements:
+- Python
+- Machine Learning
+- Data Analysis
+- Communication Skills
+- Problem Solving

@@ -1,0 +1,39 @@
+Senior Python Backend Engineer
+
+Company: InnovateTech
+Location: Remote (US)
+Employment Type: Full-time
+
+About the Role
+We are seeking a Senior Python Backend Engineer to design, build, and maintain scalable
+API services and internal developer tools. You will work closely with product and platform
+teams to deliver reliable backend systems.
+
+Required Qualifications
+- 3+ years of professional Python development experience
+- Strong experience with FastAPI or Flask
+- Proficiency with REST API design and implementation
+- Experience writing unit and integration tests (pytest preferred)
+- Familiarity with Docker and containerized deployments
+- Solid understanding of SQL and relational databases (PostgreSQL preferred)
+- Experience with Git and collaborative code review workflows
+- Strong communication skills and ability to work in Agile teams
+
+Preferred Qualifications
+- Experience with AWS cloud services (EC2, S3, Lambda)
+- Knowledge of CI/CD pipelines
+- Experience building CLI tools
+- AWS certification
+- Bachelor's degree in Computer Science or related field
+
+Responsibilities
+- Design and implement backend services and APIs
+- Write clean, tested, maintainable Python code
+- Participate in architecture discussions and code reviews
+- Improve developer tooling and automation
+- Monitor and optimize service performance and reliability
+
+Nice to Have
+- Experience with message queues (Redis, RabbitMQ)
+- Kubernetes exposure
+- Frontend familiarity (React)

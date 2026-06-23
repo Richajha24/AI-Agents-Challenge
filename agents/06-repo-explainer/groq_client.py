@@ -1,0 +1,72 @@
+"""Reusable Groq API client for repository analysis."""
+
+from __future__ import annotations
+
+import os
+from pathlib import Path
+
+from dotenv import load_dotenv
+from groq import Groq
+from groq import APIConnectionError, APIStatusError, RateLimitError
+
+load_dotenv()
+
+DEFAULT_MODEL = "llama-3.3-70b-versatile"
+
+
+class GroqClientError(Exception):
+    """Base error for Groq client operations."""
+
+
+class GroqConfigurationError(GroqClientError):
+    """Raised when required configuration is missing."""
+
+
+class GroqClient:
+    """Thin wrapper around the Groq SDK for chat completions."""
+
+    def __init__(self, api_key: str | None = None, model: str = DEFAULT_MODEL) -> None:
+        self.api_key = api_key or os.getenv("GROQ_API_KEY")
+        if not self.api_key:
+            raise GroqConfigurationError(
+                "GROQ_API_KEY is not set. Copy .env.example to .env and add your key."
+            )
+        self.model = model
+        self._client = Groq(api_key=self.api_key)
+
+    @staticmethod
+    def load_system_prompt(prompt_path: Path | None = None) -> str:
+        path = prompt_path or Path(__file__).parent / "prompts" / "system_prompt.md"
+        if not path.exists():
+            raise GroqClientError(f"System prompt not found: {path}")
+        return path.read_text(encoding="utf-8")
+
+    def analyze_repository(self, repo_context: str, system_prompt: str | None = None) -> str:
+        """Send repository metadata to Groq and return the structured analysis."""
+        prompt = system_prompt or self.load_system_prompt()
+        messages = [
+            {"role": "system", "content": prompt},
+            {"role": "user", "content": repo_context},
+        ]
+        try:
+            response = self._client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                temperature=0.3,
+                max_tokens=4096,
+            )
+        except RateLimitError as exc:
+            raise GroqClientError(
+                "Groq rate limit reached. Wait a moment and try again."
+            ) from exc
+        except APIConnectionError as exc:
+            raise GroqClientError(
+                "Could not connect to Groq API. Check your network connection."
+            ) from exc
+        except APIStatusError as exc:
+            raise GroqClientError(f"Groq API error: {exc.message}") from exc
+
+        content = response.choices[0].message.content
+        if not content:
+            raise GroqClientError("Groq returned an empty response.")
+        return content.strip()
